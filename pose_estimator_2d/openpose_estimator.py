@@ -1,9 +1,7 @@
 from .estimator_2d import Estimator2D
 from openpose import pyopenpose as op
 
-
 class OpenPoseEstimator(Estimator2D):
-
     def __init__(self, model_folder):
         """
         OpenPose 2D pose estimator. See [https://github.com/
@@ -26,7 +24,7 @@ class OpenPoseEstimator(Estimator2D):
                 img = img[y:y+h, x:x+w]
             datum = op.Datum()
             datum.cvInputData = img
-            self.opWrapper.emplaceAndPop([datum])
+            self.opWrapper.emplaceAndPop(op.VectorDatum([datum]))
             keypoints = datum.poseKeypoints
             if bbox_list:
                 # TODO: restore coordinate

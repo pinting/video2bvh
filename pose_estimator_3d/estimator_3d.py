@@ -8,11 +8,12 @@ import torch.utils.data
 import yaml
 from easydict import EasyDict
 
-
 class Estimator3D(object):
     """Base class of 3D human pose estimator."""
 
     def __init__(self, config_file, checkpoint_file):
+        #torch.cuda.empty_cache()
+        
         with open(config_file, 'r') as f:
             print(f'=> Read 3D estimator config from {config_file}.')
             self.cfg = EasyDict(yaml.load(f, Loader=yaml.Loader))
@@ -33,8 +34,10 @@ class Estimator3D(object):
             image_height=image_height
         )
         loader = torch.utils.data.DataLoader(
+            #pin_memory=False,
             dataset=dataset,
             batch_size=self.cfg.TRAIN.BATCH_SIZE
+            #auto_find_batch_size=True
         )
         poses_3d = np.zeros((poses_2d.shape[0], self.cfg.DATASET.OUT_JOINT, 3))
         frame = 0
